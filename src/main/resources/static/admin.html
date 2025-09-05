@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>LearnPro — Admin (Responsive)</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --sidebar-w:220px; --bg-dark:#07101a; --muted:#9aa3b3;
+    --accent-1:#2563eb; --danger:#dc2626;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Poppins,Inter,system-ui,Arial,sans-serif;
+    background:linear-gradient(180deg,#07101a 0%,#081428 100%); color:#e6eefc; min-height:100vh}
+  /* Sidebar */
+  .sidebar{
+    position:fixed; left:0; top:0; bottom:0; width:var(--sidebar-w); padding:20px;
+    background:linear-gradient(180deg,#0b1220,#0f152b); border-right:1px solid rgba(255,255,255,0.04);
+    box-shadow:6px 0 18px rgba(2,6,23,0.3); display:flex; flex-direction:column; gap:18px; z-index:40;
+  }
+  .brand{display:flex;gap:12px;align-items:center}
+  .brand img{height:52px;border-radius:8px;padding:4px;background:#fff}
+  .brand h1{margin:0;font-size:20px;font-weight:800;
+    background:linear-gradient(90deg,#7dd3fc 0%,#60a5fa 40%,#7c3aed 100%);
+    -webkit-background-clip:text;background-clip:text;color:transparent}
+  .subtitle{font-size:11px;color:rgba(255,255,255,0.85);text-transform:uppercase}
+  .nav{display:flex;flex-direction:column;gap:10px;margin-top:8px}
+  .nav button{background:transparent;color:var(--muted);padding:10px;border-radius:8px;border:0;text-align:left;cursor:pointer;font-weight:600}
+  .nav button[aria-current="true"]{background:linear-gradient(90deg,#1e3a8a,#2563eb);color:#fff;box-shadow:0 6px 18px rgba(32,90,230,.12)}
+  /* Main */
+  .main{margin-left:var(--sidebar-w);padding:20px;min-height:100vh}
+  .header-row{display:flex;align-items:center;gap:12px}
+  .page-title{font-size:22px;font-weight:700}
+  .muted{color:var(--muted)}
+  .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); padding:16px;border-radius:10px;margin-top:18px;border:1px solid rgba(255,255,255,0.02)}
+  label{display:block;margin:8px 0 6px;font-weight:600}
+  input[type="text"], input[type="email"], select, textarea{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:#fff}
+  .row{display:flex;gap:12px;align-items:center}
+  .btn{padding:8px 12px;border-radius:8px;border:0;cursor:pointer;font-weight:700}
+  .btn.primary{background:var(--accent-1);color:#fff}
+  .btn.ghost{background:rgba(255,255,255,0.03);color:#e6eefc;border:1px solid rgba(255,255,255,0.03)}
+  .btn.danger{background:var(--danger);color:#fff}
+  table{width:100%;border-collapse:collapse;margin-top:10px;color:#e6eefc}
+  th,td{padding:10px;border-bottom:1px solid rgba(255,255,255,0.03);text-align:left}
+  th{font-weight:700}
+  /* Mobile header & drawer */
+  .mobile-header{display:none;position:fixed;left:0;right:0;top:0;z-index:80;padding:12px 16px;background:linear-gradient(180deg,#071124,#071428);display:flex;align-items:center;gap:12px}
+  .hamburger{width:40px;height:40px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:#fff;display:inline-flex;align-items:center;justify-content:center;cursor:pointer}
+  .mobile-title{font-weight:700;color:#fff}
+  .drawer{position:fixed;inset:0;display:none;z-index:90}
+  .drawer .backdrop{position:absolute;inset:0;background:rgba(0,0,0,0.5)}
+  .drawer .panel{position:absolute;left:0;top:0;bottom:0;width:260px;background:linear-gradient(180deg,#0b1220,#0f152b);padding:20px;overflow:auto}
+  /* top-right logout */
+  .topbar{position:fixed;right:20px;top:18px;z-index:70;display:flex;gap:8px;align-items:center}
+  .logout-btn{background:var(--danger);color:#fff;border:0;padding:8px 12px;border-radius:8px;cursor:pointer;font-weight:700}
+  /* Small screens */
+  @media (max-width:900px){
+    .sidebar{display:none}
+    .main{margin-left:0;padding:14px}
+    .mobile-header{display:flex}
+    .topbar{display:none}
+    .card{margin-top:92px}
+  }
+  @media (max-width:420px){
+    input,textarea,select{font-size:14px}
+    .brand h1{font-size:18px}
+  }
+</style>
+</head>
+<body>
+
+  <!-- Sidebar (desktop) -->
+  <aside class="sidebar" aria-label="Admin nav">
+    <div class="brand">
+      <img src="./assets/logo.jpg" alt="logo">
+      <div>
+        <h1>LearnPro</h1>
+        <div class="subtitle">Admin</div>
+      </div>
+    </div>
+
+    <nav class="nav" role="navigation">
+      <button data-tab="manage" aria-current="true">Manage Users</button>
+      <button data-tab="data">View All Data</button>
+      <!-- SETTINGS REMOVED -->
+    </nav>
+  </aside>
+
+  <!-- Mobile header -->
+  <header class="mobile-header" aria-hidden="true">
+    <button class="hamburger" id="hamburger" aria-label="Open menu">☰</button>
+    <div style="display:flex;align-items:center;gap:10px">
+      <img src="./assets/logo.jpg" alt="" style="height:40px;border-radius:6px;background:#fff;padding:3px"/>
+      <div>
+        <div class="mobile-title">LearnPro</div>
+        <div style="font-size:11px;color:var(--muted)">Admin</div>
+      </div>
+    </div>
+    <div style="margin-left:auto"></div>
+    <button id="logoutMobile" class="logout-btn" style="background:var(--danger);color:#fff;border-radius:8px;padding:8px 10px">Logout</button>
+  </header>
+
+  <!-- Drawer -->
+  <div class="drawer" id="drawer">
+    <div class="backdrop" id="drawerBack"></div>
+    <div class="panel">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+        <img src="./assets/logo.jpg" alt="" style="height:44px;border-radius:6px;background:#fff;padding:3px"/>
+        <div><div style="font-weight:800">LearnPro</div><div style="font-size:12px;color:var(--muted)">Admin</div></div>
+      </div>
+      <nav style="display:flex;flex-direction:column;gap:8px">
+        <button class="drawer-item" data-tab="manage">Manage Users</button>
+        <button class="drawer-item" data-tab="data">View All Data</button>
+        <!-- drawer settings removed -->
+      </nav>
+      <div style="margin-top:18px">
+        <button id="drawerLogout" class="btn ghost" style="width:100%;text-align:left;padding:12px">Logout</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Top-right logout (desktop) -->
+  <div class="topbar">
+    <button id="logoutTop" class="logout-btn">Logout</button>
+  </div>
+
+  <!-- Main -->
+  <main class="main" id="main">
+    <div class="header-row">
+      <div class="page-title">Admin Dashboard</div>
+      <div class="muted" style="margin-left:8px" id="hello">Hi, Admin</div>
+    </div>
+
+    <!-- Manage Users -->
+    <section id="area-manage" class="card area" style="display:block">
+      <h2 style="margin:0 0 12px 0">Manage Users</h2>
+
+      <div style="display:flex;gap:16px;flex-wrap:wrap">
+        <div style="flex:1;min-width:260px">
+          <label for="u-name">Instructor Name</label>
+          <input id="u-name" type="text" placeholder="Full name">
+          <label for="u-email">Email</label>
+          <input id="u-email" type="email" placeholder="instructor@example.com">
+          <label for="u-role">Role</label>
+          <select id="u-role"><option>Instructor</option><option>Admin</option></select>
+          <div style="margin-top:12px;display:flex;gap:8px">
+            <button id="createUser" class="btn primary">Create Instructor</button>
+            <button id="clearUser" class="btn ghost">Clear</button>
+          </div>
+        </div>
+
+        <div style="flex:1;min-width:320px">
+          <label>Existing Instructors</label>
+          <div id="usersList" style="margin-top:8px"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- View All Data -->
+    <section id="area-data" class="card area" style="display:none">
+      <h2 style="margin:0 0 12px 0">View All Data</h2>
+      <p class="muted">This table shows a combined mock dataset (courses, enrollments, users). Replace with API data.</p>
+      <div style="overflow:auto;margin-top:10px">
+        <table id="dataTable" role="table" aria-label="All data">
+          <thead><tr><th>Type</th><th>Title / Name</th><th>Meta</th><th>Action</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+<script>
+  // Tab wiring (desktop)
+  function activateTab(id){
+    document.querySelectorAll('.area').forEach(a => a.style.display='none');
+    document.getElementById('area-' + id).style.display = 'block';
+    document.querySelectorAll('.nav button').forEach(b=>b.removeAttribute('aria-current'));
+    const db = Array.from(document.querySelectorAll('.nav button')).find(b=>b.dataset.tab===id);
+    if(db) db.setAttribute('aria-current','true');
+  }
+  document.querySelectorAll('.nav button').forEach(b=> b.addEventListener('click', ()=> activateTab(b.dataset.tab)));
+
+  // Drawer behavior
+  const drawer = document.getElementById('drawer'), hamburger = document.getElementById('hamburger'), back = document.getElementById('drawerBack');
+  function openDrawer(){ drawer.style.display='block'; }
+  function closeDrawer(){ drawer.style.display='none'; }
+  hamburger && hamburger.addEventListener('click', openDrawer);
+  back && back.addEventListener('click', closeDrawer);
+  document.querySelectorAll('.drawer-item').forEach(b=> b.addEventListener('click', ()=> { activateTab(b.dataset.tab); closeDrawer(); }));
+
+  // Logout handlers
+  const doLogout = ()=> { try{ localStorage.clear(); }catch(e){}; window.location.href='./index.html'; };
+  document.getElementById('logoutTop').addEventListener('click', doLogout);
+  document.getElementById('drawerLogout').addEventListener('click', doLogout);
+  document.getElementById('logoutMobile').addEventListener('click', doLogout);
+
+  // Mock data stores
+  let users = [
+    { id: 1, name: 'Alice Instructor', email: 'alice@example.com', role: 'Instructor' },
+    { id: 2, name: 'Bob Instructor', email: 'bob@example.com', role: 'Instructor' }
+  ];
+  let dataset = [
+    { type:'Course', title:'Data Structures', meta:'Instructor: Alice' },
+    { type:'Enrollment', title:'John Doe', meta:'Course: Data Structures' },
+    { type:'User', title:'Alice Instructor', meta:'Instructor' }
+  ];
+
+  // Render helpers
+  function renderUsers(){
+    const container = document.getElementById('usersList');
+    container.innerHTML = users.map(u=> {
+      return `<div class="card" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;padding:10px">
+        <div><strong>${escapeHtml(u.name)}</strong><div class="muted">${escapeHtml(u.email)} • ${escapeHtml(u.role)}</div></div>
+        <div style="display:flex;gap:6px">
+          <button class="btn ghost" data-edit="${u.id}">Edit</button>
+          <button class="btn danger" data-delete="${u.id}">Delete</button>
+        </div>
+      </div>`;
+    }).join('') || `<div class="muted">No instructors yet.</div>`;
+    container.querySelectorAll('[data-delete]').forEach(btn=> btn.addEventListener('click', ()=> {
+      const id = Number(btn.dataset.delete);
+      if(!confirm('Delete instructor?')) return;
+      users = users.filter(x=> x.id !== id);
+      renderUsers(); renderDataTable();
+    }));
+    container.querySelectorAll('[data-edit]').forEach(btn=> btn.addEventListener('click', ()=> {
+      const id = Number(btn.dataset.edit);
+      const u = users.find(x=> x.id === id);
+      if(!u) return;
+      document.getElementById('u-name').value = u.name;
+      document.getElementById('u-email').value = u.email;
+      document.getElementById('u-role').value = u.role;
+    }));
+  }
+
+  function renderDataTable(){
+    const tbody = document.querySelector('#dataTable tbody');
+    tbody.innerHTML = dataset.map((r,i)=> `<tr>
+      <td>${escapeHtml(r.type)}</td>
+      <td>${escapeHtml(r.title)}</td>
+      <td>${escapeHtml(r.meta)}</td>
+      <td><button class="btn ghost" data-row="${i}">View</button></td>
+    </tr>`).join('');
+    tbody.querySelectorAll('[data-row]').forEach(b=> b.addEventListener('click', ()=> alert('Row details (demo): ' + JSON.stringify(dataset[b.dataset.row]))));
+  }
+
+  // Create user
+  document.getElementById('createUser').addEventListener('click', ()=> {
+    const name = document.getElementById('u-name').value.trim();
+    const email = document.getElementById('u-email').value.trim();
+    const role = document.getElementById('u-role').value;
+    if(!name || !email){ alert('Provide name and email'); return; }
+    const existing = users.find(u=> u.email.toLowerCase() === email.toLowerCase());
+    if(existing){
+      existing.name = name; existing.role = role;
+      alert('Updated existing instructor (demo).');
+    } else {
+      const id = Date.now();
+      users.push({ id, name, email, role });
+      alert('Created instructor (demo).');
+    }
+    dataset.push({ type:'User', title:name, meta: role });
+    document.getElementById('u-name').value=''; document.getElementById('u-email').value=''; document.getElementById('u-role').value='Instructor';
+    renderUsers(); renderDataTable();
+  });
+
+  document.getElementById('clearUser').addEventListener('click', ()=> {
+    document.getElementById('u-name').value=''; document.getElementById('u-email').value=''; document.getElementById('u-role').value='Instructor';
+  });
+
+  function escapeHtml(s=''){ return String(s).replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+
+  // Init
+  renderUsers(); renderDataTable();
+
+  // mobile spacing
+  function applyMobilePadding(){
+    const main = document.getElementById('main');
+    if(window.innerWidth <= 900) main.classList.add('with-mobile-header');
+    else main.classList.remove('with-mobile-header');
+  }
+  window.addEventListener('resize', applyMobilePadding);
+  applyMobilePadding();
+</script>
+</body>
+</html>

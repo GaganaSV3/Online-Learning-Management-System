@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>LearnPro — Instructor</title>
+
+  <!-- font for nicer headings -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{ --sidebar-w:240px; --muted:#9aa3b3; --accent1:#60a5fa; --accent2:#7dd3fc; }
+    *{ box-sizing:border-box; }
+    body{ margin:0; font-family:Inter, system-ui, Arial, sans-serif; background: linear-gradient(180deg,#07101a,#081428); color:#e6eefc; min-height:100vh; }
+
+    /* sidebar */
+    .sidebar{
+      position:fixed; top:0; left:0; bottom:0; width:var(--sidebar-w);
+      padding:22px; display:flex; flex-direction:column; gap:18px;
+      background: linear-gradient(180deg,#09111b,#0f152b); border-right:1px solid rgba(255,255,255,0.02);
+      z-index:40;
+    }
+    .logo{ display:flex; gap:12px; align-items:center; }
+    .logo img{ height:56px; width:56px; border-radius:10px; background:#fff; padding:6px; }
+    .logo .brand{ display:flex; flex-direction:column; }
+    .brand h1{
+      margin:0; font-family:"Poppins",sans-serif; font-weight:800; font-size:18px;
+      background: linear-gradient(90deg,var(--accent2),var(--accent1)); -webkit-background-clip:text; background-clip:text; color:transparent;
+      letter-spacing:0.4px;
+    }
+    .brand .subtitle{ margin-top:2px; font-size:11px; font-weight:600; color:rgba(255,255,255,0.85); text-transform:uppercase; letter-spacing:1px; }
+
+    nav{ display:flex; flex-direction:column; gap:8px; margin-top:8px; }
+    .nav-pill{ text-align:left; padding:10px 12px; border-radius:10px; border:1px solid rgba(255,255,255,0.02); color:var(--muted); background:transparent; cursor:pointer; }
+    .nav-pill.active{ background:linear-gradient(90deg,#13293f,#122238); color:#fff; box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); }
+
+    /* main */
+    .main{ margin-left:var(--sidebar-w); padding:20px; min-height:100vh; }
+    .topbar{ display:flex; align-items:center; gap:12px; margin-bottom:12px; }
+    .page-title{ font-weight:700; font-size:20px; }
+    .hello{ color:var(--muted); margin-left:8px; }
+
+    /* top-right logout */
+    .top-logout{
+      margin-left:auto; background:#ef4444; color:white; border:0; padding:8px 12px; border-radius:8px; cursor:pointer; box-shadow:0 8px 20px rgba(239,68,68,0.12);
+    }
+
+    /* small UI */
+    .card{ background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); padding:14px; border-radius:10px; border:1px solid rgba(255,255,255,0.02); color:#e6eefc; }
+    .tabs{ display:flex; gap:8px; margin-bottom:12px; }
+    .tab{ padding:8px 10px; border-radius:10px; background:transparent; color:var(--muted); border:1px solid rgba(255,255,255,0.02); cursor:pointer; }
+    .tab.active{ color:#fff; background:linear-gradient(90deg,#1f3f8f,#2b6fbf); box-shadow: 0 6px 20px rgba(32,90,230,0.12); }
+
+    input[type="text"], textarea, select{ width:100%; padding:10px; border-radius:8px; border:1px solid rgba(255,255,255,0.03); background:transparent; color:inherit; }
+    textarea{ min-height:100px; resize:vertical; }
+    .form-row{ display:flex; gap:12px; }
+    .form-row > *{ flex:1; }
+
+    .btn{ padding:8px 12px; border-radius:8px; border:0; cursor:pointer; }
+    .btn.primary{ background:linear-gradient(90deg,#285cc4,#5aa9ff); color:#fff; }
+    .btn.ghost{ background:transparent; color:var(--muted); border:1px solid rgba(255,255,255,0.03); }
+
+    table{ width:100%; border-collapse:collapse; color:inherit; margin-top:8px; }
+    th,td{ padding:10px; border-bottom:1px solid rgba(255,255,255,0.02); text-align:left; }
+
+    .small{ font-size:13px; color:var(--muted); }
+    @media (max-width:900px){
+      .sidebar{ position:relative; width:100%; height:auto; flex-direction:row; gap:12px; padding:12px; }
+      .main{ margin-left:0; padding:12px; }
+      .logo img{ height:44px; width:44px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- SIDEBAR -->
+  <aside class="sidebar" role="navigation" aria-label="Instructor navigation">
+    <div class="logo">
+      <img src="./assets/logo.jpg" alt="LearnPro logo">
+      <div class="brand">
+        <div style="display:flex;align-items:center;gap:8px">
+          <h1>LearnPro</h1>
+        </div>
+        <div class="subtitle">Instructor Dashboard</div>
+      </div>
+    </div>
+
+    <nav role="menu" aria-label="Sections">
+      <button class="nav-pill active" data-tab="create">Create Course</button>
+      <button class="nav-pill" data-tab="update">Update Course Content</button>
+      <button class="nav-pill" data-tab="students">Enrolled Students</button>
+    </nav>
+
+    <!-- bottom area intentionally empty (no logout here) -->
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="topbar">
+      <div class="page-title"></div>
+      <div id="hello" class="hello small"></div>
+      <button id="topLogout" class="top-logout" title="Logout">Logout</button>
+    </div>
+
+    <!-- tabs (top alternative) -->
+    
+
+    <!-- AREAS -->
+    <section id="area-create" class="card area active" style="margin-top:8px">
+      <h3 style="margin-top:0">Create New Course</h3>
+      <div style="margin-top:12px;display:flex;flex-direction:column;gap:12px">
+        <input id="newTitle" type="text" placeholder="Course Title (e.g. Intro to Algorithms)">
+        <div class="form-row">
+          <input id="newCategory" type="text" placeholder="Category (e.g. Computer Science)">
+          <input id="newDuration" type="text" placeholder="Duration (e.g. 20h)">
+        </div>
+        <div class="form-row">
+          <select id="newLevel">
+            <option>Beginner</option><option>Intermediate</option><option>Advanced</option>
+          </select>
+          <input id="newInstructor" type="text" placeholder="Instructor name">
+        </div>
+        <textarea id="newSummary" placeholder="Short course description"></textarea>
+        <input id="newLessons" type="text" placeholder="Lessons (comma-separated)">
+        <div style="display:flex;gap:8px">
+          <button id="createCourseBtn" class="btn primary">Create Course</button>
+          <button id="clearCreateBtn" class="btn ghost">Clear</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="area-update" class="card area" style="margin-top:12px; display:none">
+      <h3 style="margin-top:0">Update Course Content</h3>
+      <div style="margin-top:12px; display:flex; gap:12px; flex-direction:column">
+        <select id="updateSelect" class="small">
+          <option value="">Select a course to update</option>
+        </select>
+        <input id="updTitle" type="text" placeholder="Course Title">
+        <textarea id="updSummary" placeholder="Course summary / description"></textarea>
+        <input id="updLessons" type="text" placeholder="Lessons (comma-separated)">
+        <div style="display:flex;gap:8px">
+          <button id="saveUpdateBtn" class="btn primary">Save Update</button>
+          <button id="resetUpdateBtn" class="btn ghost">Reset</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="area-students" class="card area" style="margin-top:12px; display:none">
+      <h3 style="margin-top:0">Enrolled Students</h3>
+      <div style="margin-top:12px" id="studentsWrap">
+        <table>
+          <thead>
+            <tr><th>Student</th><th>Course</th><th>Enrolled On</th><th>Progress</th></tr>
+          </thead>
+          <tbody id="studentsBody">
+            <!-- dynamic -->
+          </tbody>
+        </table>
+        <div id="noStudents" class="small" style="display:none;margin-top:8px;color:var(--muted)">No enrolled students yet.</div>
+      </div>
+    </section>
+  </main>
+
+  <!-- overlay for modals -->
+  <div id="overlay" style="display:none;position:fixed;inset:0;background:rgba(5,8,15,0.6);align-items:center;justify-content:center;z-index:9999"></div>
+
+  <script type="module">
+    // top-right logout -> immediate nav to index.html
+    document.getElementById('topLogout').addEventListener('click', ()=> {
+      // clear any local auth keys used by prior code for safety
+      try{ ['lms_user','lms_token','auth_user','user','token'].forEach(k=>localStorage.removeItem(k)); }catch(e){}
+      location.href = './index.html';
+    });
+
+    // small tab wiring (both sidebar and top tabs sync)
+    const leftNav = Array.from(document.querySelectorAll('.sidebar .nav-pill'));
+    const topTabs = Array.from(document.querySelectorAll('.tabs .tab'));
+    function activate(id){
+      leftNav.forEach(b => b.classList.toggle('active', b.dataset.tab === id));
+      topTabs.forEach(b => b.classList.toggle('active', b.dataset.tab === id));
+      document.querySelectorAll('.area').forEach(a => a.classList.remove('active'));
+      const el = document.getElementById('area-' + id);
+      if(el) { el.style.display = ''; el.classList.add('active'); } // rely on CSS/inline
+      // hide non-active areas explicitly for older browsers:
+      ['create','update','students'].forEach(name=>{
+        const area = document.getElementById('area-'+name);
+        if(area) area.style.display = (name === id ? 'block' : 'none');
+      });
+    }
+    leftNav.forEach(b => b.addEventListener('click', ()=> activate(b.dataset.tab)));
+    topTabs.forEach(b => b.addEventListener('click', ()=> activate(b.dataset.tab)));
+
+    // small mock-data + simple handlers (keeps page functional without backend)
+    let COURSES = [
+      { id: 1, title:'Data Structures & Algorithms', category:'Computer Science', duration:'24h', level:'Intermediate', instructor:'Prof. Andrew', summary:'Fundamentals', lessons:[ 'Intro','Arrays','Trees' ] },
+      { id: 2, title:'Python for CS', category:'Programming', duration:'10h', level:'Beginner', instructor:'Eve', summary:'Python basics', lessons:[ 'Basics','OOP','Project' ] }
+    ];
+    let ENROLLMENTS = [
+      { student:'Demo Student', courseId:1, enrolledAt:'2025-08-10', progress:58 }
+    ];
+
+    function populateUpdateSelect(){
+      const sel = document.getElementById('updateSelect');
+      sel.innerHTML = '<option value="">Select a course to update</option>';
+      COURSES.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c.id; opt.textContent = c.title;
+        sel.appendChild(opt);
+      });
+    }
+    function populateStudentsTable(){
+      const body = document.getElementById('studentsBody');
+      body.innerHTML = '';
+      if(!ENROLLMENTS.length){
+        document.getElementById('noStudents').style.display = 'block';
+        return;
+      }
+      document.getElementById('noStudents').style.display = 'none';
+      ENROLLMENTS.forEach(en => {
+        const tr = document.createElement('tr');
+        const course = COURSES.find(c => c.id === en.courseId) || { title:'Course #' + en.courseId };
+        tr.innerHTML = `<td>${escapeHtml(en.student)}</td><td>${escapeHtml(course.title)}</td><td>${escapeHtml((en.enrolledAt||'').slice(0,10))}</td><td>${escapeHtml(String(en.progress||0))}%</td>`;
+        body.appendChild(tr);
+      });
+    }
+
+    function escapeHtml(s=''){ return String(s).replace(/[&<>"']/g,m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m])); }
+
+    // create course handler
+    document.getElementById('createCourseBtn').addEventListener('click', ()=> {
+      const t = document.getElementById('newTitle').value.trim();
+      if(!t){ alert('Please enter a course title'); return; }
+      const newId = (COURSES.length ? Math.max(...COURSES.map(c=>c.id)) : 100) + 1;
+      const course = {
+        id: newId,
+        title: t,
+        category: document.getElementById('newCategory').value.trim() || 'General',
+        duration: document.getElementById('newDuration').value.trim() || '',
+        level: document.getElementById('newLevel').value,
+        instructor: document.getElementById('newInstructor').value.trim() || 'Instructor',
+        summary: document.getElementById('newSummary').value.trim() || '',
+        lessons: (document.getElementById('newLessons').value.trim() || '').split(',').map(s=>s.trim()).filter(Boolean)
+      };
+      COURSES.push(course);
+      populateUpdateSelect();
+      alert('Course created: ' + course.title);
+      // clear create form
+      ['newTitle','newCategory','newDuration','newInstructor','newSummary','newLessons'].forEach(id=>document.getElementById(id).value = '');
+      // optional: switch to update tab
+      populateCoursesCards();
+    });
+
+    document.getElementById('clearCreateBtn').addEventListener('click', ()=> {
+      ['newTitle','newCategory','newDuration','newInstructor','newSummary','newLessons'].forEach(id=>document.getElementById(id).value = '');
+    });
+
+    // update handlers
+    document.getElementById('updateSelect').addEventListener('change', function(){
+      const id = Number(this.value);
+      const c = COURSES.find(x=> x.id === id);
+      if(!c){ document.getElementById('updTitle').value=''; document.getElementById('updSummary').value=''; document.getElementById('updLessons').value=''; return; }
+      document.getElementById('updTitle').value = c.title;
+      document.getElementById('updSummary').value = c.summary || '';
+      document.getElementById('updLessons').value = (c.lessons||[]).join(', ');
+    });
+
+    document.getElementById('saveUpdateBtn').addEventListener('click', ()=> {
+      const sel = document.getElementById('updateSelect');
+      const id = Number(sel.value);
+      if(!id){ alert('Choose a course first'); return; }
+      const c = COURSES.find(x=> x.id === id);
+      if(!c) return;
+      c.title = document.getElementById('updTitle').value.trim() || c.title;
+      c.summary = document.getElementById('updSummary').value.trim();
+      c.lessons = (document.getElementById('updLessons').value || '').split(',').map(s=>s.trim()).filter(Boolean);
+      alert('Course updated: ' + c.title);
+      populateUpdateSelect();
+      populateCoursesCards();
+    });
+
+    document.getElementById('resetUpdateBtn').addEventListener('click', ()=> {
+      document.getElementById('updateSelect').value = '';
+      document.getElementById('updTitle').value=''; document.getElementById('updSummary').value=''; document.getElementById('updLessons').value='';
+    });
+
+    // small card view of courses on the create page - optional helper for quick review
+    function populateCoursesCards(){
+      const wrap = document.getElementById('availableCoursesQuick');
+      if(!wrap) return;
+      wrap.innerHTML = '';
+      COURSES.forEach(c=>{
+        const div = document.createElement('div');
+        div.className = 'card';
+        div.style.marginTop = '8px';
+        div.innerHTML = `<strong>${escapeHtml(c.title)}</strong><div class="small">${escapeHtml(c.category)} • ${escapeHtml(c.duration)}</div>`;
+        wrap.appendChild(div);
+      });
+    }
+
+    // load initial mock / populate UI
+    function initPage(){
+      document.getElementById('hello').textContent = window.auth && window.auth.user ? `Hi, ${window.auth.user.name || 'Instructor'}` : '';
+      populateUpdateSelect();
+      populateStudentsTable();
+      populateCoursesCards();
+    }
+
+    initPage();
+
+    // (Optional) keep arrays persisted locally
+    // localStorage.setItem('instructor_courses', JSON.stringify(COURSES));
+    // localStorage.setItem('instructor_enrollments', JSON.stringify(ENROLLMENTS));
+  </script>
+</body>
+</html>

@@ -1,0 +1,671 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>LearnPro — Student</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --sidebar-w:220px;
+      --bg-dark:#07101a;
+      --muted:#9aa3b3;
+    }
+
+    /* Reset + base */
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family:Inter, system-ui, Arial, sans-serif;
+      background: linear-gradient(180deg,#07101a 0%, #081428 100%);
+      color:#e6eefc;
+      min-height:100vh;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+
+    /* Sidebar */
+    .sidebar{
+      position:fixed;
+      left:0; top:0; bottom:0;
+      width:var(--sidebar-w);
+      padding:20px;
+      background: linear-gradient(180deg,#0b1220,#0f152b);
+      border-right:1px solid rgba(255,255,255,0.02);
+      box-shadow: 6px 0 18px rgba(2,6,23,0.3);
+      display:flex;
+      flex-direction:column;
+      gap:18px;
+      z-index:40;
+    }
+    .logo{ display:flex; align-items:center; gap:12px; }
+    .logo img{ height:56px; width:auto; border-radius:8px; padding:6px; background:#fff; box-shadow:0 6px 18px rgba(2,6,23,0.25); }
+    .logo h1{
+      font-family: "Poppins", Inter, system-ui, Arial, sans-serif;
+      font-weight:800;
+      font-size:20px;
+      margin:0;
+      letter-spacing:0.6px;
+      background: linear-gradient(90deg, #7dd3fc 0%, #60a5fa 45%, #7c3aed 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 0 6px 18px rgba(96,165,250,0.08);
+    }
+    .subtitle{ margin-top:2px; font-weight:600; font-size:12px; color: rgba(255,255,255,0.82); text-transform:uppercase; letter-spacing:1.2px; opacity:0.9; }
+
+    nav{ display:flex; flex-direction:column; gap:8px; margin-top:10px; }
+    .nav-pill{
+      padding:10px 12px;
+      border-radius:8px;
+      background:transparent;
+      color:var(--muted);
+      border:1px solid rgba(255,255,255,0.02);
+      cursor:pointer;
+      text-align:left;
+      font-weight:600;
+    }
+    .nav-pill.active{
+      background:linear-gradient(90deg,#1e304a,#122238);
+      color:#fff;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
+    }
+
+    /* No bottom logout (removed) */
+
+    /* Main */
+    .main{ margin-left:var(--sidebar-w); padding:20px 28px; min-height:100vh; box-sizing:border-box; }
+    .topbar{ display:flex; align-items:center; gap:12px; margin-bottom:8px; }
+    .title { font-weight:800; font-size:22px; }
+    .hello { color:var(--muted); margin-left:8px; }
+
+    /* top-right logout button */
+    .top-logout{
+      margin-left:auto;
+      padding:8px 14px;
+      border-radius:8px;
+      border:0;
+      cursor:pointer;
+      background:#2563eb; /* blue style for action - but logout red is more common; here using red per earlier request */
+      color:#fff;
+      font-weight:700;
+      background:#dc2626; /* red */
+      box-shadow: 0 6px 18px rgba(220,38,38,0.12);
+    }
+    .top-logout:hover{ background:#b91c1c; }
+
+    /* Cards + UI */
+    .card{ background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); padding:14px; border-radius:10px; border:1px solid rgba(255,255,255,0.02); color:#e6eefc; box-sizing:border-box; }
+    .controls{ display:flex; gap:10px; align-items:center; }
+
+    .input{ padding:8px 10px; border-radius:8px; border:1px solid rgba(255,255,255,0.03); background:transparent; color:#e6eefc; min-width:120px; }
+    select.input{ color:#e6eefc; }
+
+    .cards{ display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:14px; margin-top:12px; }
+    .course-card{ display:flex; flex-direction:column; gap:8px; min-height:150px; }
+    .course-card header{ display:flex; justify-content:space-between; align-items:center; }
+
+    .pill{ padding:6px 8px; border-radius:999px; border:1px solid rgba(255,255,255,0.03); font-size:13px; color:var(--muted) }
+
+    .muted{ color:var(--muted); }
+
+    .progress-sm{ height:8px; background:rgba(255,255,255,0.02); border-radius:999px; overflow:hidden; border:1px solid rgba(255,255,255,0.02) }
+    .progress-sm > div{ height:100%; background:linear-gradient(90deg,#34d399,#60a5fa); width:0% }
+
+    table{ width:100%; border-collapse:collapse; color:#e6eefc; }
+    th,td{ padding:10px; border-bottom:1px solid rgba(255,255,255,0.02); text-align:left }
+    th{ color:#fff; font-weight:700; }
+
+    /* Buttons */
+    .btn{
+      display:inline-block;
+      padding:8px 12px;
+      border-radius:8px;
+      border:1px solid rgba(255,255,255,0.04);
+      background:transparent;
+      color:var(--muted);
+      cursor:pointer;
+      font-weight:600;
+    }
+    .btn.small{ padding:6px 8px; font-size:13px; border-radius:6px; }
+    .btn.danger{ background:transparent; color:#ff6b6b; border-color:rgba(255,107,107,0.12); }
+    /* Primary (Enroll) - bright blue as requested */
+    .btn.primary{
+      background:#2563eb;
+      color:#fff;
+      border:0;
+      padding:8px 12px;
+      border-radius:8px;
+      font-weight:700;
+      cursor:pointer;
+      transition: background .15s ease;
+    }
+    .btn.primary:hover{ background:#1e40af; }
+
+    /* Modal overlay */
+    .overlay{ position: fixed; inset:0; background: rgba(6,9,20,0.45); display:none; align-items:center; justify-content:center; z-index:9999; }
+    .modal{ background:#fff; width:760px; max-width:96%; border-radius:12px; padding:16px; box-shadow: 0 20px 60px rgba(3,6,20,0.4); color:#072039; }
+
+    /* Lesson styles inside modal */
+    .lessons{ margin-top:10px; max-height:260px; overflow:auto; }
+    .lesson{ display:flex; align-items:center; gap:12px; padding:8px; border-radius:8px; background:#fff; margin-bottom:8px; border:1px solid #eef2ff20; }
+    .lesson .index{ width:36px; height:36px; display:flex; align-items:center; justify-content:center; background:#f3f6fa; border-radius:6px }
+
+    /* Responsive */
+    @media (max-width:900px){
+      .sidebar{ position:relative; width:100%; height:auto; flex-direction:row; gap:12px; padding:12px; }
+      .main{ margin-left:0; padding:12px; }
+      .cards{ grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); }
+      .top-logout{ margin-left:8px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- LEFT SIDEBAR -->
+  <aside class="sidebar" role="navigation" aria-label="Student sidebar">
+    <div class="logo" aria-hidden="false">
+      <img src="./assets/logo.jpg" alt="LearnPro logo"/>
+      <div>
+        <div style="display:flex;align-items:center">
+          <span style="display:inline-block;width:8px;height:32px;border-radius:6px;margin-right:8px;background:linear-gradient(180deg,#34d399,#60a5fa);"></span>
+          <h1>LearnPro</h1>
+        </div>
+        <div class="subtitle">Student Dashboard</div>
+      </div>
+    </div>
+
+    <nav role="menu" aria-label="Sections">
+      <button class="nav-pill active" data-tab="available">Available Courses</button>
+      <button class="nav-pill" data-tab="my">My Courses</button>
+      <button class="nav-pill" data-tab="progress">Progress</button>
+    </nav>
+
+    <!-- removed bottom logout button per request -->
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="topbar" role="banner">
+      <div class="title">Student Dashboard</div>
+      <div id="hello" class="hello">Hi, Demo Student</div>
+
+      <!-- TOP-RIGHT LOGOUT (goes to index.html on click) -->
+      <button id="logoutTop" class="top-logout" title="Logout and return to homepage">Logout</button>
+    </div>
+
+    <!-- Controls (search / category) -->
+    <div style="margin-top:8px" class="card">
+      <div class="controls" style="justify-content:space-between; align-items:center;">
+        <div style="display:flex; gap:10px; flex:1; align-items:center;">
+          <input id="search" class="input" placeholder="Search courses..." style="flex:1"/>
+          <select id="category" class="input">
+            <option value="">All categories</option>
+          </select>
+        </div>
+        <div>
+          <span id="availableCount" class="pill">0 courses</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- AVAILABLE COURSES -->
+    <section id="area-available" class="area active" style="margin-top:12px">
+      <div id="availableList" class="cards"></div>
+    </section>
+
+    <!-- MY COURSES -->
+    <section id="area-my" class="area" style="margin-top:12px; display:none;">
+      <div class="card">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Course</th>
+                <th>Instructor</th>
+                <th>Progress</th>
+                <th>Enrolled On</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="myCoursesBody"></tbody>
+          </table>
+        </div>
+        <div id="myEmpty" class="muted" style="display:none;padding:12px">You haven’t enrolled in any course yet.</div>
+      </div>
+    </section>
+
+    <!-- PROGRESS -->
+    <section id="area-progress" class="area" style="margin-top:12px; display:none;">
+      <div style="display:grid;grid-template-columns:1fr 320px;gap:12px">
+        <div class="card">
+          <h3 style="margin:0 0 8px 0">Overall Progress</h3>
+          <div class="progress" style="margin-top:8px"><div id="overallBar" style="width:0%"></div></div>
+          <div class="muted" style="margin-top:8px"><span id="overallText">0%</span> completed</div>
+        </div>
+        <div class="card">
+          <h3 style="margin:0 0 8px 0">Stats</h3>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <span class="pill">Enrolled: <b id="statEnrolled">0</b></span>
+            <span class="pill">Completed: <b id="statCompleted">0</b></span>
+            <span class="pill">Hours: <b id="statHours">0</b></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:12px">
+        <h3 style="margin:0 0 8px 0">Per-course Progress</h3>
+        <div id="progressList" class="cards" style="margin-top:10px"></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Overlay & modal -->
+  <div id="overlay" class="overlay" role="dialog" aria-hidden="true">
+    <div id="modal" class="modal" role="document" tabindex="-1" aria-hidden="true"></div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast" style="display:none;position:fixed;right:18px;bottom:18px;background:#041124;color:#fff;padding:8px 12px;border-radius:8px;z-index:10000"></div>
+
+  <script>
+    /********************************************************
+     * Single-file Student dashboard (cleaned per request)
+     * - top tabs removed (we use sidebar navigation)
+     * - mockCourses trimmed to 6 items (removed one)
+     * - Enroll button styled bright blue (.btn.primary)
+     * - bottom logout removed; top-right logout added
+     ********************************************************/
+
+    // minimal helper toast
+    function toast(msg){
+      const el = document.getElementById('toast');
+      if(!el) return console.log(msg);
+      el.textContent = msg;
+      el.style.display = 'block';
+      clearTimeout(window.__t);
+      window.__t = setTimeout(()=> el.style.display='none', 2200);
+    }
+
+    // app state
+    const EP = {
+      courses: '/api/courses',
+      enroll: '/api/enroll',
+      my: '/api/me/enrollments',
+      progress: '/api/me/progress'
+    };
+    let ALL_COURSES = [];
+    let MY_ENRS = [];
+    let PROG = { overall:0, completed:0, hours:0, perCourse:[] };
+
+    // DOM
+    const availableList = document.getElementById('availableList');
+    const availableCount = document.getElementById('availableCount');
+    const categorySel = document.getElementById('category');
+    const searchBox = document.getElementById('search');
+    const myBody = document.getElementById('myCoursesBody');
+    const myEmpty = document.getElementById('myEmpty');
+    const overallBar = document.getElementById('overallBar');
+    const overallText = document.getElementById('overallText');
+    const progressList = document.getElementById('progressList');
+    const overlay = document.getElementById('overlay');
+    const modal = document.getElementById('modal');
+
+    // top-right logout behaviour
+    document.getElementById('logoutTop').addEventListener('click', ()=> {
+      // clear common auth keys (best-effort)
+      ['lms_user','lms_token','auth_user','user','token','adminName','lastLogin'].forEach(k=>localStorage.removeItem(k));
+      // go to index (homepage)
+      location.href = './index.html';
+    });
+
+    // sidebar nav activation
+    document.querySelectorAll('.nav-pill').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        document.querySelectorAll('.nav-pill').forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+        const tab = btn.dataset.tab;
+        document.querySelectorAll('.area').forEach(a=> a.style.display='none');
+        const el = document.getElementById('area-'+tab);
+        if(el) el.style.display = '';
+      });
+    });
+
+    // search & category wiring
+    searchBox && searchBox.addEventListener('input', renderAvailable);
+    categorySel && categorySel.addEventListener('change', renderAvailable);
+
+    // mocks (6 courses)
+    function mockCourses(){
+      return [
+        {id:101,title:'Data Structures & Algorithms', category:'Computer Science', instructor:'Prof. Andrew', duration:'24h', level:'Intermediate', summary:'Fundamental DS & algorithm design and analysis.'},
+        {id:102,title:'Operating Systems', category:'Computer Science', instructor:'Dr. Lin', duration:'20h', level:'Intermediate', summary:'Processes, threads, scheduling, and memory management.'},
+        {id:103,title:'Computer Networks', category:'Computer Science', instructor:'Dr. Kaur', duration:'16h', level:'Intermediate', summary:'Networking layers, TCP/IP, routing, and sockets.'},
+        {id:104,title:'Database Systems (SQL & NoSQL)', category:'Database', instructor:'Carol', duration:'12h', level:'Beginner', summary:'Relational modeling, SQL, and NoSQL concepts.'},
+        {id:105,title:'Machine Learning Basics', category:'AI/ML', instructor:'Dr. Patel', duration:'18h', level:'Intermediate', summary:'Supervised learning, evaluation, and pipelines.'},
+        {id:106,title:'Artificial Intelligence: Foundations', category:'AI/ML', instructor:'Dr. Nguyen', duration:'18h', level:'Advanced', summary:'Search, knowledge representation and reasoning.'}
+      ];
+    }
+
+    function mockMy(){
+      return [
+        {courseId:101, title:'Data Structures & Algorithms', instructor:'Prof. Andrew', progress:58, enrolledAt:'2025-08-10', lessonsCompleted:[1,2,3,4,5,6], lessons:[
+          {id:1,title:'Intro & Arrays'},{id:2,title:'Linked Lists'},{id:3,title:'Stacks & Queues'},{id:4,title:'Recursion'},{id:5,title:'Sorting 1'},{id:6,title:'Sorting 2'},{id:7,title:'Trees'},{id:8,title:'Graphs'},{id:9,title:'Dynamic Programming'},{id:10,title:'Wrap-up'}
+        ]}
+      ];
+    }
+
+    // local persistence
+    function loadLocalEnrollments(){ try{ const raw = localStorage.getItem('my_enrollments'); return raw ? JSON.parse(raw) : null; }catch(e){ return null; } }
+    function saveLocalEnrollments(){ try{ localStorage.setItem('my_enrollments', JSON.stringify(MY_ENRS)); }catch(e){ console.warn('save error',e); } }
+
+    // small helpers (no server calls in this demo)
+    function escapeHtml(s=''){ return String(s).replace(/[&<>"']/g, m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m])); }
+    function progressForCourse(courseId){ const m = MY_ENRS.find(e=> String(e.courseId)===String(courseId)); return m ? (m.progress||0) : 0; }
+
+    // render available
+    function renderAvailable(){
+      const q = (searchBox.value||'').toLowerCase().trim();
+      const cat = categorySel.value;
+      const cats = Array.from(new Set(ALL_COURSES.map(c=>c.category).filter(Boolean))).sort();
+      categorySel.innerHTML = '<option value="">All categories</option>' + cats.map(c=>`<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('');
+      const list = ALL_COURSES.filter(c=>{
+        const hit = (c.title||'').toLowerCase().includes(q) || (c.summary||'').toLowerCase().includes(q);
+        const catOk = !cat || c.category===cat;
+        return hit && catOk;
+      });
+      availableCount.textContent = `${list.length} course${list.length!==1?'s':''}`;
+      availableList.innerHTML = list.map(c=> courseCardHtml(c)).join('') || `<div class="muted">No courses found.</div>`;
+
+      // wire enroll/open buttons
+      availableList.querySelectorAll('[data-enroll]').forEach(btn=> btn.addEventListener('click', ()=> confirmEnroll(btn.dataset.enroll)));
+      availableList.querySelectorAll('[data-open]').forEach(btn=> btn.addEventListener('click', ()=> openCourseModal(btn.dataset.open)));
+    }
+
+    function courseCardHtml(c){
+      const enrolled = MY_ENRS.some(e=> String(e.courseId) === String(c.id));
+      const progressPct = progressForCourse(c.id);
+      return `
+        <div class="card course-card" style="min-height:150px">
+          <header>
+            <div>
+              <div style="font-weight:700">${escapeHtml(c.title)}</div>
+              <div class="muted" style="font-size:12px">${escapeHtml(c.instructor||'')}</div>
+            </div>
+            <span class="pill">${escapeHtml(c.level||'')}</span>
+          </header>
+          <div class="muted">${escapeHtml(c.summary||'')}</div>
+          <div class="course-meta" style="margin-top:8px">
+            ${c.category?`<span class="pill">${escapeHtml(c.category)}</span>`:''}
+            ${c.duration?`<span class="pill">${escapeHtml(c.duration)}</span>`:''}
+          </div>
+          <div style="margin-top:10px;display:flex;align-items:center;justify-content:space-between">
+            <div style="flex:1;margin-right:8px">
+              <div class="progress-sm"><div style="width:${progressPct}%"></div></div>
+              <div class="muted" style="font-size:12px;margin-top:6px">${progressPct}% progress</div>
+            </div>
+            ${
+              enrolled
+              ? `<div style="display:flex;flex-direction:column;gap:6px"><button class="btn small" data-open="${c.id}">Open</button><button class="btn small" data-resume="${c.id}">Resume</button></div>`
+              : `<button class="btn primary" data-enroll="${c.id}">Enroll</button>`
+            }
+          </div>
+        </div>
+      `;
+    }
+
+    // my courses render
+    function renderMy(){
+      if (!MY_ENRS.length){ myBody.innerHTML = ''; myEmpty.style.display = 'block'; return; }
+      myEmpty.style.display = 'none';
+      myBody.innerHTML = MY_ENRS.map(e=> `
+        <tr>
+          <td>${escapeHtml(e.title|| findCourseTitle(e.courseId))}</td>
+          <td>${escapeHtml(e.instructor|| findCourseInstructor(e.courseId))}</td>
+          <td style="min-width:160px">
+            <div class="progress-sm"><div style="width:${e.progress||0}%"></div></div>
+            <span class="muted">${e.progress||0}%</span>
+          </td>
+          <td>${escapeHtml((e.enrolledAt||'').slice(0,10))}</td>
+          <td>
+            <button class="btn small" data-open="${e.courseId}">Open</button>
+            <button class="btn small" data-resume="${e.courseId}">Resume</button>
+            <button class="btn small danger" data-unenroll="${e.courseId}">Unenroll</button>
+          </td>
+        </tr>
+      `).join('');
+      myBody.querySelectorAll('[data-open]').forEach(b=> b.addEventListener('click', ()=> openCourseModal(b.dataset.open)));
+      myBody.querySelectorAll('[data-resume]').forEach(b=> b.addEventListener('click', ()=> openCourseModal(b.dataset.resume, {resume:true})));
+      myBody.querySelectorAll('[data-unenroll]').forEach(b=> b.addEventListener('click', ()=> confirmUnenroll(b.dataset.unenroll)));
+    }
+
+    // find helpers
+    function findCourseTitle(id){ return (ALL_COURSES.find(c=> String(c.id)===String(id))||{}).title || ('Course #'+id); }
+    function findCourseInstructor(id){ return (ALL_COURSES.find(c=> String(c.id)===String(id))||{}).instructor || ''; }
+
+    // overlay helpers
+    function showOverlay(html){
+      modal.innerHTML = html;
+      overlay.style.display = 'flex';
+      overlay.setAttribute('aria-hidden','false');
+      modal.focus?.();
+    }
+    function hideOverlay(){
+      overlay.style.display = 'none';
+      overlay.setAttribute('aria-hidden','true');
+      modal.innerHTML = '';
+    }
+    overlay.addEventListener('click', (e)=> { if(e.target === overlay) hideOverlay(); });
+
+    // enroll flow (local)
+    function confirmEnroll(courseId){
+      const c = ALL_COURSES.find(x=> String(x.id)===String(courseId));
+      if(!c) return toast('Course not found');
+      const content = `
+        <h3>Enroll: ${escapeHtml(c.title)}</h3>
+        <div class="muted small">${escapeHtml(c.instructor || '')} • ${escapeHtml(c.duration || '')} • ${escapeHtml(c.level || '')}</div>
+        <div style="margin-top:10px">${escapeHtml(c.summary || '')}</div>
+        <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:12px">
+          <button id="cancelEnroll" class="btn">Cancel</button>
+          <button id="confirmEnroll" class="btn primary">Enroll & Start</button>
+        </div>
+      `;
+      showOverlay(content);
+      document.getElementById('cancelEnroll').onclick = hideOverlay;
+      document.getElementById('confirmEnroll').onclick = ()=> doEnroll(courseId);
+    }
+
+    function doEnroll(courseId){
+      hideOverlay();
+      const c = ALL_COURSES.find(x=> String(x.id)===String(courseId));
+      if(!c) return toast('Course not found');
+      const entry = { courseId:Number(courseId), title:c.title, instructor:c.instructor, progress:0, enrolledAt:new Date().toISOString(), lessonsCompleted: [], lessons: null };
+      if(!MY_ENRS.some(x=> String(x.courseId)===String(courseId))){
+        MY_ENRS.push(entry);
+        recomputeProg();
+        saveLocalEnrollments();
+        renderAvailable();
+        renderMy();
+        renderProgress();
+        toast('Enrolled successfully');
+        setTimeout(()=> openCourseModal(courseId), 300);
+      } else toast('Already enrolled');
+    }
+
+    function confirmUnenroll(courseId){
+      const c = ALL_COURSES.find(x=> String(x.id)===String(courseId));
+      if(!c) return toast('Course not found');
+      const content = `
+        <h3>Unenroll</h3>
+        <div class="muted small">Are you sure you want to unenroll from <strong>${escapeHtml(c.title)}</strong>?</div>
+        <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:12px">
+          <button id="cancelUnenroll" class="btn">Cancel</button>
+          <button id="doUnenroll" class="btn danger">Unenroll</button>
+        </div>
+      `;
+      showOverlay(content);
+      document.getElementById('cancelUnenroll').onclick = hideOverlay;
+      document.getElementById('doUnenroll').onclick = ()=> {
+        hideOverlay();
+        MY_ENRS = MY_ENRS.filter(x=> String(x.courseId) !== String(courseId));
+        recomputeProg();
+        saveLocalEnrollments();
+        renderAvailable();
+        renderMy();
+        renderProgress();
+        toast('Unenrolled');
+      };
+    }
+
+    // course modal with lessons
+    function openCourseModal(courseId, opts = { resume:false }){
+      const c = ALL_COURSES.find(x=> String(x.id)===String(courseId));
+      let my = MY_ENRS.find(x=> String(x.courseId)===String(courseId));
+      if(!c) return toast('Course not found');
+      if(!my){
+        confirmEnroll(courseId);
+        return;
+      }
+      if(!my.lessons || !Array.isArray(my.lessons) || my.lessons.length !== 10){
+        my.lessons = Array.from({length:10}).map((_,i)=> ({ id:i+1, title: `Lesson ${i+1}: ${c.title} — Part ${i+1}` }));
+      }
+      const completed = my.lessonsCompleted || [];
+      const progress = my.progress || 0;
+
+      const content = `
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <h3>${escapeHtml(c.title)}</h3>
+          <div>
+            <button id="closeModal" class="btn small">Close</button>
+          </div>
+        </div>
+        <div class="muted small">${escapeHtml(c.instructor||'')} • ${escapeHtml(c.duration||'')}</div>
+        <div style="margin-top:10px">${escapeHtml(c.summary || '')}</div>
+
+        <div style="margin-top:12px;display:flex;gap:12px;align-items:center">
+          <div style="flex:1">
+            <div class="progress" style="height:14px;background:#eef2ff08;border-radius:8px;overflow:hidden;border:1px solid rgba(0,0,0,0.05)"><div id="modalProgBar" style="width:${progress}%;height:100%;background:linear-gradient(90deg,#2563eb,#60a5fa);"></div></div>
+            <div class="muted" style="margin-top:6px">${progress}% complete</div>
+          </div>
+        </div>
+
+        <div style="margin-top:12px">
+          <strong>Lessons</strong>
+          <div class="lessons" id="lessonsList">
+            ${my.lessons.map(ls => {
+              const done = completed.includes(ls.id);
+              return `<div class="lesson ${done? 'done':''}" data-lesson="${ls.id}">
+                <div class="index">${ls.id}</div>
+                <div style="flex:1">${escapeHtml(ls.title)}</div>
+                <div><button class="btn small" data-action="${done? 'undo':'do'}" data-lesson="${ls.id}">${done? 'Undo':'Mark complete'}</button></div>
+              </div>`;
+            }).join('')}
+          </div>
+        </div>
+
+        <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:12px">
+          <button id="unenrollBtn" class="btn danger small">Unenroll</button>
+        </div>
+      `;
+      showOverlay(content);
+      document.getElementById('closeModal').onclick = hideOverlay;
+      document.getElementById('unenrollBtn').onclick = ()=> confirmUnenroll(courseId);
+
+      bindLessonButtons(courseId, opts);
+    }
+
+    function bindLessonButtons(courseId, opts = { resume:false }){
+      const my = MY_ENRS.find(x=> String(x.courseId)===String(courseId));
+      if(!my) return;
+      const lessonsList = modal.querySelector('#lessonsList');
+      if(!lessonsList) return;
+      const incompleteNode = Array.from(lessonsList.querySelectorAll('.lesson')).find(n=>{
+        const lid = Number(n.dataset.lesson);
+        return !(my.lessonsCompleted || []).includes(lid);
+      });
+
+      lessonsList.querySelectorAll('.lesson').forEach(n=>{
+        const id = Number(n.dataset.lesson);
+        const btn = n.querySelector('button');
+        btn.onclick = async ()=>{
+          const action = btn.dataset.action;
+          if(action === 'do'){
+            if(!my.lessonsCompleted) my.lessonsCompleted = [];
+            if(!my.lessonsCompleted.includes(id)) my.lessonsCompleted.push(id);
+          } else {
+            my.lessonsCompleted = (my.lessonsCompleted||[]).filter(x=> x!==id);
+          }
+          const total = lessonsList.querySelectorAll('.lesson').length || 10;
+          const done = my.lessonsCompleted.length;
+          my.progress = Math.min(100, Math.round((done / total) * 100));
+          saveLocalEnrollments();
+          recomputeProg();
+          renderAvailable();
+          renderMy();
+          renderProgress();
+          const bar = modal.querySelector('#modalProgBar'); if(bar) bar.style.width = (my.progress||0) + '%';
+          lessonsList.querySelectorAll('.lesson').forEach(n2=>{
+            const lid = Number(n2.dataset.lesson);
+            const doneNow = my.lessonsCompleted.includes(lid);
+            n2.classList.toggle('done', doneNow);
+            const b = n2.querySelector('button');
+            b.textContent = doneNow ? 'Undo' : 'Mark complete';
+            b.dataset.action = doneNow ? 'undo' : 'do';
+          });
+          toast('Lesson updated');
+        };
+      });
+
+      if(opts && opts.resume){
+        setTimeout(()=>{
+          const node = incompleteNode || lessonsList.querySelector('.lesson:last-child');
+          if(node){
+            node.scrollIntoView({behavior:'smooth', block:'center'});
+            node.classList.add('highlight');
+            setTimeout(()=> node.classList.remove('highlight'), 1600);
+          }
+        }, 150);
+      }
+    }
+
+    function recomputeProg(){
+      const completed = MY_ENRS.filter(x=> (x.progress||0) >= 100).length;
+      const overall = MY_ENRS.length ? Math.round(MY_ENRS.reduce((a,c)=>a+(c.progress||0),0)/MY_ENRS.length) : 0;
+      PROG = { overall, completed, hours: Math.round(MY_ENRS.length*3), perCourse: MY_ENRS.map(x=>({courseId:x.courseId, title:x.title, progress:x.progress||0})) };
+    }
+
+    function renderProgress(){
+      overallBar && (overallBar.style.width = (PROG.overall||0) + '%');
+      overallText && (overallText.textContent = (PROG.overall||0) + '%');
+      document.getElementById('statEnrolled').textContent = MY_ENRS.length;
+      document.getElementById('statCompleted').textContent = PROG.completed||0;
+      document.getElementById('statHours').textContent = PROG.hours||0;
+      progressList.innerHTML = (PROG.perCourse||[]).map(p=> `
+        <div class="card">
+          <div style="font-weight:700">${escapeHtml(p.title|| findCourseTitle(p.courseId))}</div>
+          <div class="muted" style="margin:8px 0">${escapeHtml(findCourseInstructor(p.courseId))}</div>
+          <div class="progress-sm"><div style="width:${p.progress||0}%"></div></div>
+          <div class="muted" style="margin-top:6px">${p.progress||0}% complete</div>
+        </div>
+      `).join('') || `<div class="muted">No progress yet — enroll to get started.</div>`;
+    }
+
+    // app init
+    function loadAll(){
+      ALL_COURSES = mockCourses();
+      const persisted = loadLocalEnrollments();
+      MY_ENRS = persisted ? persisted : mockMy();
+      recomputeProg();
+      renderAvailable();
+      renderMy();
+      renderProgress();
+    }
+
+    // init
+    loadAll();
+
+  </script>
+</body>
+</html>

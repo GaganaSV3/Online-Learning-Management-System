@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>LearnPro — Choose Account</title>
+
+  <style>
+    :root{
+      --bg-1: #eaf4ff;
+      --bg-2: #f6fafc;
+      --muted: #6b7280;
+      --accent: #6b5cff;
+      --accent-2: #5aa9ff;
+      --radius: 14px;
+      --shadow-1: 0 10px 30px rgba(14,22,40,0.08);
+      --shadow-2: 0 22px 60px rgba(10,18,40,0.09);
+      --danger: #b91c1c;
+    }
+
+    html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial; color:#061021; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;}
+
+/* Full-screen background image (big.jpg) — put file at assets/big.jpg */
+    body {
+      background-color: var(--bg-1);
+      background-image: url("assets/big.jpg");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .bg-overlay {
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(rgba(6,16,33,0.08), rgba(6,16,33,0.04));
+      backdrop-filter: blur(3px) saturate(.95);
+      z-index: 0;
+    }
+
+    main { position: relative; z-index: 2; padding: 28px; box-sizing: border-box; width:100%; display:flex; align-items:center; justify-content:center; }
+
+    .card {
+      width:880px; max-width:96%; border-radius:var(--radius); padding:20px; box-sizing:border-box;
+      background: linear-gradient(180deg, rgba(255,255,255,0.92), rgba(250,250,252,0.92));
+      box-shadow: var(--shadow-2); border:1px solid rgba(10,18,34,0.06); display:flex; gap:18px; align-items:stretch;
+      overflow:hidden;
+    }
+
+    .left { width:360px; min-width:240px; padding:18px; display:flex; flex-direction:column; align-items:center; gap:12px; text-align:center; }
+    /* logo now uses an image */
+    .logo {
+      width:78px;
+      height:78px;
+      border-radius:12px;
+      overflow:hidden;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background: linear-gradient(135deg,var(--accent),var(--accent-2));
+      box-shadow:0 8px 22px rgba(91,77,255,0.12);
+    }
+    .logo img {
+      display:block;
+      width:100%;
+      height:100%;
+      object-fit:cover;
+    }
+
+    .brand-name { font-weight:800; font-size:20px; color:#072039; }
+    .brand-sub { color:var(--muted); font-size:13px; }
+
+    .types { display:flex; flex-direction:column; gap:12px; width:100%; margin-top:6px; }
+    .type-card { display:flex; gap:12px; align-items:center; padding:10px 12px; border-radius:12px; cursor:pointer; border:1px solid rgba(9,14,26,0.04); background: rgba(255,255,255,0.72); }
+    .type-card.active { border-color: rgba(107,92,255,0.16); background: linear-gradient(90deg, rgba(107,92,255,0.06), rgba(90,169,255,0.03)); }
+    .type-avatar { width:56px; height:56px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:26px; background: linear-gradient(180deg,#f4f8ff,#fff); color:var(--accent); }
+
+    .right { flex:1; padding:20px; display:flex; flex-direction:column; gap:10px; justify-content:center; }
+    .title { font-size:20px; font-weight:800; color:#072039; }
+    .subtitle { color:var(--muted); font-size:13px; margin-bottom:6px; }
+    .form { display:flex; gap:12px; flex-wrap:wrap; }
+    .col { flex:1; min-width:220px; display:flex; flex-direction:column; gap:8px; }
+    .input { padding:12px 14px; border-radius:10px; border:1px solid rgba(10,16,30,0.06); background:white; font-size:14px; }
+    .row-inline { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+    .remember { display:flex; align-items:center; gap:8px; color:var(--muted); font-size:13px; }
+    .btn { padding:12px 16px; border-radius:10px; font-weight:800; cursor:pointer; border:0; }
+    .btn-primary { background: linear-gradient(90deg,var(--accent),var(--accent-2)); color:white; }
+    .social-btn { display:inline-flex; align-items:center; justify-content:center; width:46px; height:46px; border-radius:10px; background:white; border:1px solid rgba(10,16,30,0.04); cursor:pointer; padding:0; }
+    .social-btn svg { width:22px; height:22px; display:block; }
+    .error { display:none; padding:10px 12px; border-radius:8px; background: rgba(185,28,28,0.06); color: var(--danger); font-weight:700; margin-top:6px; }
+
+    @media (max-width:920px){
+      .card { flex-direction:column; width:92%; }
+      .left { width:auto; order:2; }
+      .right { order:1; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-overlay" aria-hidden="true"></div>
+
+  <main>
+    <section class="card" role="dialog" aria-labelledby="choose-title">
+      <aside class="left" aria-hidden="false">
+        <div class="logo" aria-hidden="false">
+          <!-- logo.jpg placed in assets/logo.jpg -->
+          <img src="assets/logo.jpg" alt="LearnPro logo">
+        </div>
+
+        <div class="brand-name">LearnPro</div>
+        <div class="brand-sub">Choose account & sign in</div>
+
+        <div class="types" role="tablist" aria-label="Account types">
+          <div class="type-card active" data-role="STUDENT" tabindex="0" role="button" aria-pressed="true">
+            <div class="type-avatar">👩</div>
+            <div style="text-align:left">
+              <div style="font-weight:700">Mentee</div>
+              <div style="font-size:13px;color:var(--muted)">Student</div>
+            </div>
+          </div>
+
+          <div class="type-card" data-role="INSTRUCTOR" tabindex="0" role="button" aria-pressed="false">
+            <div class="type-avatar">🧑‍🏫</div>
+            <div style="text-align:left">
+              <div style="font-weight:700">Mentor</div>
+              <div style="font-size:13px;color:var(--muted)">Instructor</div>
+            </div>
+          </div>
+
+          <div class="type-card" data-role="ADMIN" tabindex="0" role="button" aria-pressed="false">
+            <div class="type-avatar">👨‍💼</div>
+            <div style="text-align:left">
+              <div style="font-weight:700">Administrator</div>
+              <div style="font-size:13px;color:var(--muted)">Admin</div>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <div class="right" aria-live="polite">
+        <div>
+          <div class="title" id="choose-title">Sign in to LearnPro</div>
+          <div class="subtitle">Select your account type, enter credentials and press Login.</div>
+        </div>
+
+        <form id="loginForm" class="form" onsubmit="return false;">
+          <div class="col">
+            <input id="loginIdentifier" class="input" placeholder="Username or email" autocomplete="username" />
+            <input id="loginPassword" class="input" type="password" placeholder="Password" autocomplete="current-password" />
+            <div class="row-inline" style="margin-top:6px">
+              <label class="remember"><input id="remember" type="checkbox"> Remember me</label>
+              <button id="loginBtn" class="btn btn-primary" type="button">LOGIN</button>
+            </div>
+
+            <div id="errorBox" class="error" role="alert" aria-live="assertive"></div>
+          </div>
+
+          <div class="col" style="align-items:center; justify-content:center">
+            <div style="color:var(--muted); font-size:13px">Sign in with</div>
+            <div style="display:flex; gap:10px; margin-top:8px">
+              <!-- Google logo button (G icon) -->
+              <button id="btnGoogle" class="social-btn" type="button" aria-label="Sign in with Google">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <path fill="#EA4335" d="M12 10.2v3.6h5.2c-.2 1-1 2.8-3.2 4.2l-.1.1-4.1-.3c-2.5-.2-4.6-2.3-4.9-4.8l-.1-1.1h4.3V10.2z"/>
+                  <path fill="#34A853" d="M6.3 14.9c.4 1.5 1.6 2.7 3.1 3.3l4.1.3c-2.3 1.6-5.5 1.5-7.8-.4-1.7-1.6-2.5-4-1.6-6.4l1.9 3.2z"/>
+                  <path fill="#4A90E2" d="M12 6.1c1.1 0 2.1.4 2.9 1l2.2-2.2C16.1 3.4 14.2 2.6 12 2.6 8.9 2.6 6.2 4 4.6 6.5l2.2 1.7C7.8 7 9.8 6.1 12 6.1z"/>
+                  <path fill="#FBBC05" d="M4.6 6.5L3 8.3c1.7-3 5-5 9-5 2.2 0 4.2.8 5.8 2.2l-2.2 2.2C14.1 6.5 13.1 6.1 12 6.1 9.8 6.1 7.8 7 6.3 8.7z"/>
+                </svg>
+              </button>
+
+              <!-- Facebook logo button (f icon) -->
+              <button id="btnFb" class="social-btn" type="button" aria-label="Sign in with Facebook">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <path fill="#1877F2" d="M22 12.1C22 6.5 17.5 2 11.9 2S2 6.5 2 12.1C2 17 5.7 21 10.5 21V14.7H8v-2.6h2.5V10c0-2.4 1.4-3.7 3.6-3.7 1 0 2.1.1 2.1.1v2.3H15c-1.1 0-1.4.7-1.4 1.4v1.7h2.5l-.4 2.6H13.6V21C18.4 21 22 17 22 12.1z"/>
+                </svg>
+              </button>
+            </div>
+
+            <div id="selectedRoleLabel" style="color:var(--muted); font-size:13px; text-align:center; margin-top:12px">Mentee — please fill out the form below to sign in.</div>
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    // Hard-coded accounts mapping (kept internal)
+    const ACCOUNTS = {
+      STUDENT: { email: 'student1@gmail.com', pw: '123', name: 'Demo Student', redirect: 'student.html' },
+      INSTRUCTOR: { email: 'instructor1@gmail.com', pw: '123', name: 'Demo Instructor', redirect: 'instructor.html' },
+      ADMIN: { email: 'admin1@gmail.com', pw: '123', name: 'Demo Admin', redirect: 'admin.html' }
+    };
+
+    // DOM refs
+    const typeEls = Array.from(document.querySelectorAll('.type-card'));
+    const selectedRoleLabel = document.getElementById('selectedRoleLabel');
+    const identifier = document.getElementById('loginIdentifier');
+    const password = document.getElementById('loginPassword');
+    const remember = document.getElementById('remember');
+    const loginBtn = document.getElementById('loginBtn');
+    const btnGoogle = document.getElementById('btnGoogle');
+    const btnFb = document.getElementById('btnFb');
+    const errorBox = document.getElementById('errorBox');
+
+    let selectedRole = 'STUDENT';
+
+    function setActiveRole(roleEl){
+      typeEls.forEach(el=>{
+        const r = el.getAttribute('data-role');
+        if(r === roleEl.getAttribute('data-role')){
+          el.classList.add('active');
+          el.setAttribute('aria-pressed','true');
+          selectedRole = r;
+          selectedRoleLabel.textContent = el.querySelector('div > div').textContent + ' — please fill out the form below to sign in.';
+        } else {
+          el.classList.remove('active');
+          el.setAttribute('aria-pressed','false');
+        }
+      });
+      // prefill identifier with test email for the selected role (internal only)
+      const preset = ACCOUNTS[selectedRole];
+      if(preset) identifier.value = preset.email;
+      hideError();
+    }
+
+    // Init
+    setActiveRole(typeEls[0]);
+
+    typeEls.forEach(el=>{
+      el.addEventListener('click', ()=> setActiveRole(el));
+      el.addEventListener('keydown', (e)=> { if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setActiveRole(el); } });
+    });
+
+    function showError(msg){
+      errorBox.textContent = msg;
+      errorBox.style.display = 'block';
+    }
+    function hideError(){
+      errorBox.textContent = '';
+      errorBox.style.display = 'none';
+    }
+
+    // Submit on Enter key in password
+    password.addEventListener('keydown', (e)=> { if(e.key === 'Enter') loginBtn.click(); });
+
+    // Helper: base64url
+    function base64url(str){ return btoa(unescape(encodeURIComponent(str))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,''); }
+    function createFakeJwt(user){
+      const header = { alg: 'HS256', typ: 'JWT' };
+      const iat = Math.floor(Date.now()/1000);
+      const exp = iat + 3600;
+      const payload = { sub: String(user.id || 'demo-'+Math.floor(Math.random()*100000)), name: user.name || user.email, email: user.email, role: user.role || 'STUDENT', iat, exp };
+      const unsigned = base64url(JSON.stringify(header)) + '.' + base64url(JSON.stringify(payload));
+      const fakeSig = base64url(Math.random().toString(36).slice(2) + Date.now());
+      return unsigned + '.' + fakeSig;
+    }
+
+    loginBtn.addEventListener('click', ()=> {
+      hideError();
+      const email = (identifier.value || '').trim();
+      const pw = (password.value || '').trim();
+
+      if(!email || !pw){ showError('Please enter both email and password.'); return; }
+
+      const acc = ACCOUNTS[selectedRole];
+      if(!acc){ showError('Selected role is not supported.'); return; }
+
+      if(email === acc.email && pw === acc.pw){
+        const demoUser = { id: Date.now(), name: acc.name, email: acc.email, role: selectedRole };
+        const fakeJwt = createFakeJwt(demoUser);
+        localStorage.setItem('user', JSON.stringify(demoUser));
+        localStorage.setItem('token', fakeJwt);
+        if(selectedRole === 'ADMIN') localStorage.setItem('adminName', acc.name); else localStorage.removeItem('adminName');
+        if(remember.checked) localStorage.setItem('lastLogin', email); else localStorage.removeItem('lastLogin');
+        // redirect
+        setTimeout(()=> { window.location.href = acc.redirect; }, 450);
+      } else {
+        showError('Invalid credentials for the selected account.');
+      }
+    });
+
+    btnGoogle.addEventListener('click', ()=> { showError('Google sign-in not wired.'); setTimeout(hideError,1600); });
+    btnFb.addEventListener('click', ()=> { showError('Facebook sign-in not wired.'); setTimeout(hideError,1600); });
+
+    document.addEventListener('DOMContentLoaded', ()=> {
+      const last = localStorage.getItem('lastLogin');
+      if(last) identifier.value = last;
+    });
+  </script>
+</body>
+</html>
