@@ -93,55 +93,49 @@ learnpro/
 
 
 
-📌 API Endpoints (Sample)
-User Authentication
+---
 
-POST /api/auth/login → login user
+## 📌 API Endpoints (Sample)
 
-POST /api/auth/register → register student/instructor
+### 🔑 User Authentication
+- **POST** `/api/auth/login` → login user  
+- **POST** `/api/auth/register` → register student/instructor  
 
-Courses
+### 📚 Courses
+- **POST** `/api/courses` → create course (Instructor only)  
+- **GET** `/api/courses` → list all courses  
+- **GET** `/api/courses/{id}` → course details  
 
-POST /api/courses → create course (Instructor only)
+### 📝 Enrollment
+- **POST** `/api/enroll/{courseId}` → student enrolls in course  
+- **GET** `/api/enrollments/{studentId}` → get student’s courses  
+- **PUT** `/api/progress/{moduleId}` → update progress  
 
-GET /api/courses → list all courses
+### ⚙️ Admin
+- **POST** `/api/admin/create-instructor` → create Instructor  
+- **DELETE** `/api/admin/delete-user/{id}` → delete user  
 
-GET /api/courses/{id} → course details
+---
 
-Enrollment
+## 🧪 Future Enhancements
+- Add JWT authentication for secure login  
+- Add file uploads for course content  
+- Add quiz & certification support  
+- Integrate email notifications  
 
-POST /api/enroll/{courseId} → student enrolls in course
+---
 
-GET /api/enrollments/{studentId} → get student’s courses
+## 🤝 Contributing
+Contributions are welcome!  
+Please **fork this repo**, create a new branch, and submit a **pull request**.
 
-PUT /api/progress/{moduleId} → update progress
+---
 
-Admin
+## 📜 License
+This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
 
-POST /api/admin/create-instructor → create Instructor
+---
 
-DELETE /api/admin/delete-user/{id} → delete user
-.
-
-🧪 Future Enhancements
-
-Add JWT authentication for secure login
-
-Add file uploads for course content
-
-Add quiz & certification support
-
-Integrate email notifications
-
-🤝 Contributing
-
-Contributions are welcome! Please fork this repo, create a branch, and submit a pull request.
-
-📜 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-👩‍💻 Author
-
-Developed by [GAGANASHREE S V]
-🎓 Full-stack Java Developer | Spring Boot | MySQL | Web Development
+## 👩‍💻 Author
+**Developed by:** [GAGANASHREE S V]  
+🎓 *Full-stack Java Developer | Spring Boot | MySQL | Web Development*
