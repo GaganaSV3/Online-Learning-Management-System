@@ -74,16 +74,25 @@ learnpro/
 
 
 ---
+# 📚 LearnPro LMS
 
-## ⚙️ Setup & Installation
+A full-stack Learning Management System (LMS) built with **Spring Boot, MySQL, and HTML/CSS/JS**.  
+It allows **Admins, Instructors, and Students** to manage courses, enrollments, and track progress.
 
-### 1. Clone Repository
+---
+
+## 🚀 Getting Started
+
+### 1. Clone the Repository
 ```bash
 git clone https://github.com/your-username/learnpro-lms.git
 cd learnpro-lms
-2. Setup Backend (Spring Boot)
 
-Open project in Eclipse / IntelliJ
+#### 2.Setup Backend (Spring Boot)
+
+Open the project in Eclipse / IntelliJ
+
+Update src/main/resources/application.properties with your MySQL credentials:
 
 Update src/main/resources/application.properties with your MySQL credentials:
 
