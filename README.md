@@ -72,62 +72,6 @@ learnpro/
 └── README.md
 
 
-
----
-# 📚 LearnPro LMS
-
-A full-stack Learning Management System (LMS) built with **Spring Boot, MySQL, and HTML/CSS/JS**.  
-It allows **Admins, Instructors, and Students** to manage courses, enrollments, and track progress.
-
----
-
-## 🚀 Getting Started
-
-### 1. Clone the Repository
-```bash
-git clone https://github.com/your-username/learnpro-lms.git
-cd learnpro-lms
-
-#### 2.Setup Backend (Spring Boot)
-
-Open the project in Eclipse / IntelliJ
-
-Update src/main/resources/application.properties with your MySQL credentials:
-
-Update src/main/resources/application.properties with your MySQL credentials:
-
-spring.datasource.url=jdbc:mysql://localhost:3306/learnpro?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC
-spring.datasource.username=root
-spring.datasource.password=yourpassword
-spring.jpa.hibernate.ddl-auto=update
-spring.jpa.show-sql=true
-
-
-Run the backend:
-
-mvn spring-boot:run
-
-
-Backend runs on http://localhost:8080
-
-3. Setup Frontend
-
-Navigate to the frontend/ folder
-
-Open index.html in a browser (or use a local server like Live Server in VS Code)
-
-🗄️ Database Schema (Simplified)
-
-Users (Admin / Instructor / Student)
-
-Roles (many-to-many with Users)
-
-Courses (created by Instructors, viewed by Students)
-
-Enrollments (Student ↔ Course, with progress tracking)
-
-Modules & ModuleProgress (track completion per student)
-
 🖼️ Screenshots
 🔑 Login Page
 ![Uploading {2C3C3C36-22F6-412C-AA26-37997BBB8DD6}.png…]()
